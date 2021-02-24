@@ -24,7 +24,7 @@ export default class PolygonClient {
     async retrieveStocks(ticker) {
         if (!tickers.includes(ticker)) throw new Error("Invalid stock ticker.");
 
-        if (this.cache[ticker] && this.rateLimitMap.get(ticker) && this.rateLimitMap.get(ticker) > Date.now())
+        if (this.cache[ticker] && this.rateLimitMap.get(ticker) > Date.now())
             return this.cache[ticker];
 
         const json = await (await fetch(this.authorize(`${this.baseURL}/aggs/ticker/${ticker}/prev?unadjusted=true`))).json();
