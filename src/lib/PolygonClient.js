@@ -1,12 +1,11 @@
-import fetch from "node-fetch";
-import tickers from "./tickers.js";
+const fetch = require("node-fetch");
 
 /**
  * An API to interact with polygon.io's stock API.
  * Abstracts HTTP requests into asynchronous methods.
  * @class
  */
-export default class PolygonClient {
+class PolygonClient {
     /**
      * Creates a PolygonClient instance.
      * @param {string} apiKey API key to use.
@@ -14,27 +13,81 @@ export default class PolygonClient {
     constructor(apiKey) {
         this.apiKey = apiKey;
 
-        this.baseURL = `https://api.polygon.io/v2`;
+        this.baseURL = `https://api.polygon.io`;
 
-        this.cache = {};
+        this.tickerCache = {};
+        this.tickerRateLimitMap = new Map();
 
-        this.rateLimitMap = new Map();
+        this.dailyCache = {};
+
+        this.detailsCache = {};
+
+        this.bannedTickers = [];
+        this.bannedDates = [];
     }
 
     /**
-     * Retrieves JSON about a specific stock with a ticker.
+     * Fetches JSON about a specific stock with a ticker.
      * @param {string} ticker Stock ticker to look up.
      */
-    async retrieveStocks(ticker) {
-        if (!tickers.includes(ticker)) throw new Error("Invalid stock ticker.");
+    async fetchStocks(ticker) {
+        if (this.bannedTickers.includes(ticker)) return {};
 
-        if (this.cache[ticker] && this.rateLimitMap.get(ticker) > Date.now()) return this.cache[ticker];
+        if (this.tickerCache[ticker] && this.tickerRateLimitMap.get(ticker) > Date.now()) return this.tickerCache[ticker];
 
-        const json = await (await fetch(this.authorize(`${this.baseURL}/aggs/ticker/${ticker}/prev?unadjusted=true`))).json();
+        const res = await fetch(this.authorize(`${this.baseURL}/v2/aggs/ticker/${ticker}/prev?unadjusted=true`));
 
-        this.cache[ticker] = json;
+        const json = await res.json();
 
-        this.rateLimitMap.set(ticker, Date.now() + 1000 * 60 * 60); // 1 hour cooldown
+        if (res.ok && json.results) this.tickerCache[ticker] = json;
+
+        if (!json.results) this.bannedTickers.push(ticker);
+
+        this.tickerRateLimitMap.set(ticker, Date.now() + 1000 * 60);
+
+        return json;
+    }
+
+    /**
+     * Fetches JSON with company details for a ticker.
+     * @param {string} ticker Stock ticker to look up.
+     */
+    async fetchDetails(ticker) {
+        if (this.bannedTickers.includes(ticker)) return {};
+
+        if (this.detailsCache[ticker] && this.tickerRateLimitMap.get(ticker) > Date.now()) return this.detailsCache[ticker];
+
+        const res = await fetch(this.authorize(`${this.baseURL}/v1/meta/symbols/${ticker}/company?`));
+
+        const json = await res.json();
+
+        if (res.ok) this.detailsCache[ticker] = json;
+
+        if (json.error) this.bannedTickers.push(ticker);
+
+        this.tickerRateLimitMap.set(ticker, Date.now() + 1000 * 60);
+
+        return json;
+    }
+
+    /**
+     * Fetches JSON for a specific date's OHLC.
+     * @param {Date} date Date to look up.
+     */
+    async fetchDaily(date) {
+        const d = date.toISOString().slice(0, 10);
+
+        if (this.bannedDates.includes(d)) return {};
+
+        if (this.dailyCache[d]) return this.dailyCache[d];
+
+        const res = await fetch(this.authorize(`${this.baseURL}/v2/aggs/grouped/locale/us/market/stocks/${d}?unadjusted=true`));
+
+        const json = await res.json();
+
+        if (res.ok && json.results) this.dailyCache[d] = json;
+
+        if (!json.results) this.bannedDates.push(d);
 
         return json;
     }
@@ -47,3 +100,5 @@ export default class PolygonClient {
         return `${apiRoute}&apiKey=${this.apiKey}`;
     }
 }
+
+module.exports = PolygonClient;
