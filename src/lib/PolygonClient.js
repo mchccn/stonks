@@ -7,6 +7,10 @@ import tickers from "./tickers.js";
  * @class
  */
 export default class PolygonClient {
+    /**
+     * Creates a PolygonClient instance.
+     * @param {string} apiKey API key to use.
+     */
     constructor(apiKey) {
         this.apiKey = apiKey;
 
@@ -24,8 +28,7 @@ export default class PolygonClient {
     async retrieveStocks(ticker) {
         if (!tickers.includes(ticker)) throw new Error("Invalid stock ticker.");
 
-        if (this.cache[ticker] && this.rateLimitMap.get(ticker) > Date.now())
-            return this.cache[ticker];
+        if (this.cache[ticker] && this.rateLimitMap.get(ticker) > Date.now()) return this.cache[ticker];
 
         const json = await (await fetch(this.authorize(`${this.baseURL}/aggs/ticker/${ticker}/prev?unadjusted=true`))).json();
 
