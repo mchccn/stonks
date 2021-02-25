@@ -45,7 +45,7 @@ export default {
                             .map(({ ticker, results }) => user.portfolio[ticker].count * results[0].c)
                             .reduce((a, b) => a + b, 0)}`
                     ),
-                ...formatPortfolio(user.portfolio),
+                ...(await formatPortfolio(user.portfolio)),
             ],
             {
                 time: 120000,

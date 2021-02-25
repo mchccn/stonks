@@ -6,4 +6,12 @@ const keys = Object.keys(process.env)
 
 const manager = new ClientManager(keys);
 
+(async () => {
+    await manager.fetchDaily(new Date(new Date().setDate(new Date().getDate() - 1)));
+
+    setInterval(async () => {
+        await manager.fetchDaily(new Date(new Date().setDate(new Date().getDate() - 1)));
+    }, 1000 * 60 * 60 * 24);
+})();
+
 export default manager;

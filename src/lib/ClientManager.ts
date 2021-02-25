@@ -31,6 +31,9 @@ export default class ClientManager {
             this.bannedDates = [...new Set(this.clients.flatMap((c) => c.bannedDates))];
             this.clients.forEach((c) => (c.bannedDates = this.bannedDates));
 
+            this.clients.map((c) => c.tickerCache).map((c) => (this.tickerCache = { ...this.tickerCache, ...c }));
+            this.clients.forEach((c) => (c.tickerCache = this.tickerCache));
+
             this.clients.map((c) => c.dailyCache).map((c) => (this.dailyCache = { ...this.dailyCache, ...c }));
             this.clients.forEach((c) => (c.dailyCache = this.dailyCache));
 
@@ -70,7 +73,22 @@ export default class ClientManager {
 
         const json = await client.fetchDaily(date);
 
-        if (json.results) this.dailyCache[d] = json;
+        if (json.results) {
+            this.dailyCache[d] = json;
+
+            json.results.forEach((res: any) => {
+                this.tickerCache[res.T] = {
+                    ticker: res.T,
+                    queryCount: 1,
+                    resultsCount: 1,
+                    adjusted: false,
+                    results: [res],
+                    status: "OK",
+                    request_id: "f4a7ae3137e7085220538fd3dcfd0cd2",
+                    count: 1,
+                };
+            });
+        }
 
         return json;
     }

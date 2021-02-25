@@ -13,10 +13,10 @@ export default {
         ticker: "string",
         amount: "integer",
     }),
-    description: "Look at your shit portfolio.",
-    details: "View your portfolio full of fucking crap.",
-    category: "the fucking exit",
-    cooldown: 3600,
+    description: "Buy some shit.",
+    details: "This is the part where you actually invest.",
+    category: "stocks shit",
+    cooldown: 10,
     async callback({ message, parsed, client }) {
         const user = (await users.findById(message.author.id))!;
 
@@ -26,7 +26,7 @@ export default {
 
         const json = await manager.fetchStocks(ticker);
 
-        if (!json || !json.results) return message.channel.send(`There isn't a company with that ticker.`);
+        if (!json || !json.results) return message.channel.send(`There isn't a company with that ticker bruh.`);
 
         const cost = json.results[0].c * amount;
 
