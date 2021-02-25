@@ -1,13 +1,11 @@
 import { MessageEmbed } from "discord.js";
 
-/**
- * Formats a user's portfolio into an array of embeds.
- * @param {{ [ticker: string]: {
- *     name: string;
- *     count: number;
- * } }} portfolio
- */
-export default function formatPortfolio(portfolio) {
+export default function formatPortfolio(portfolio: {
+    [ticker: string]: {
+        name: string;
+        count: number;
+    };
+}) {
     const tickers = Object.keys(portfolio);
 
     const amount = 5;
@@ -15,7 +13,7 @@ export default function formatPortfolio(portfolio) {
     const fields = tickers
         .map((_, i) =>
             i % amount
-                ? undefined
+                ? undefined!
                 : tickers.slice(i, Math.floor(i / amount) * amount + amount).map((ticker) => ({ ticker, ...portfolio[ticker] }))
         )
         .filter(($) => $);

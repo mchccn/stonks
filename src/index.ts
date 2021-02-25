@@ -1,12 +1,16 @@
-const AeroClient = require("@aeroware/aeroclient");
-const ClientManager = require("./lib/ClientManager");
+import AeroClient from "@aeroware/aeroclient";
+import { config as dotenv } from "dotenv";
+import connect from "./database/connect";
+import ClientManager from "./lib/ClientManager";
 
-require("dotenv").config();
+dotenv();
 
 (async () => {
+    await connect();
+
     const keys = Object.keys(process.env)
         .filter((k) => k.startsWith("API_KEY"))
-        .map((k) => process.env[k]);
+        .map((k) => process.env[k] as string);
 
     const manager = new ClientManager(keys);
 

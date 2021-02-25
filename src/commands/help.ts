@@ -1,6 +1,8 @@
-const { MessageEmbed } = require("discord.js");
+import { Command } from "@aeroware/aeroclient/dist/types";
+import { MessageEmbed } from "discord.js";
+import ms from "ms";
 
-module.exports = {
+export default {
     name: "help",
     aliases: ["commands"],
     description: "",
@@ -11,7 +13,7 @@ module.exports = {
     async callback({ message, args, client }) {
         const { commands } = client;
 
-        const categories = new Set();
+        const categories = new Set<string>();
 
         commands.forEach((cmd) => (cmd.category ? categories.add(cmd.category) : null));
 
@@ -100,4 +102,4 @@ module.exports = {
                 .setTimestamp(message.createdAt)
         );
     },
-};
+} as Command;

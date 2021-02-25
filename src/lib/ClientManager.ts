@@ -1,19 +1,18 @@
-const PolygonClient = require("./PolygonClient");
+import PolygonClient from "./PolygonClient";
 
-/**
- * Oversees resource use and manages PolygonClients.
- *
- * @class
- */
-class ClientManager {
-    static instance;
+export default class ClientManager {
+    public static instance: ClientManager;
 
-    /**
-     * Constructs a new ClientManager instance.
-     * @param {string[]} keys API keys to use.
-     */
-    constructor(keys) {
-        if (ClientManager.instance) return instance;
+    public index!: number;
+    public clients!: PolygonClient[];
+    public tickerCache!: { [ticker: string]: any };
+    public dailyCache!: { [day: string]: any };
+    public detailsCache!: { [ticker: string]: any };
+    public bannedTickers!: string[];
+    public bannedDates!: string[];
+
+    public constructor(keys: string[]) {
+        if (ClientManager.instance) return ClientManager.instance;
 
         this.index = 0;
         this.clients = keys.map((k) => new PolygonClient(k));
@@ -42,11 +41,7 @@ class ClientManager {
         ClientManager.instance = this;
     }
 
-    /**
-     * Fetches JSON about a specific stock with a ticker.
-     * @param {string} ticker Stock ticker to look up.
-     */
-    async fetchStocks(ticker) {
+    public async fetchStocks(ticker: string) {
         const client = this.clients[this.index++ % this.clients.length];
 
         const json = await client.fetchStocks(ticker);
@@ -54,11 +49,7 @@ class ClientManager {
         return json;
     }
 
-    /**
-     * Fetches JSON with company details for a ticker.
-     * @param {string} ticker Stock ticker to look up.
-     */
-    async fetchDetails(ticker) {
+    public async fetchDetails(ticker: string) {
         const client = this.clients[this.index++ % this.clients.length];
 
         const json = await client.fetchDetails(ticker);
@@ -66,11 +57,7 @@ class ClientManager {
         return json;
     }
 
-    /**
-     * Fetches JSON for a specific date's OHLC.
-     * @param {Date} date Date to look up.
-     */
-    async fetchDaily(date) {
+    public async fetchDaily(date: Date) {
         const d = date.toISOString().slice(0, 10);
 
         const cachedDaily = this.clients.find((c) => c.dailyCache[d]);
@@ -88,11 +75,7 @@ class ClientManager {
         return json;
     }
 
-    /**
-     * Gets JSON for a ticker from the cache, if it exists.
-     * @param {string} ticker Ticker to get from cache.
-     */
-    getStocks(ticker) {
+    public getStocks(ticker: string) {
         const cachedTicker = this.clients.find((c) => c.tickerCache[ticker]);
 
         if (cachedTicker) this.tickerCache[ticker] = cachedTicker.tickerCache[ticker];
@@ -100,11 +83,7 @@ class ClientManager {
         return cachedTicker ? cachedTicker.tickerCache[ticker] : undefined;
     }
 
-    /**
-     * Gets JSON for a ticker's details from the cache, if it exists.
-     * @param {string} ticker Ticker to get from cache.
-     */
-    getDetails(ticker) {
+    public getDetails(ticker: string) {
         const cachedTicker = this.clients.find((c) => c.detailsCache[ticker]);
 
         if (cachedTicker) this.detailsCache[ticker] = cachedTicker.detailsCache[ticker];
@@ -112,11 +91,7 @@ class ClientManager {
         return cachedTicker ? cachedTicker.detailsCache[ticker] : undefined;
     }
 
-    /**
-     * Gets JSON for a date from the cache, if it exists.
-     * @param {Date} date Date to get from cache.
-     */
-    getDaily(date) {
+    public getDaily(date: Date) {
         const d = date.toISOString().slice(0, 10);
 
         const cachedDaily = this.clients.find((c) => c.dailyCache[d]);
@@ -126,5 +101,3 @@ class ClientManager {
         return cachedDaily ? cachedDaily.dailyCache[d] : undefined;
     }
 }
-
-module.exports = ClientManager;
