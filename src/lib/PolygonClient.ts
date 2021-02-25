@@ -27,7 +27,7 @@ export default class PolygonClient {
     }
 
     public async fetchStocks(ticker: string) {
-        if (this.bannedTickers.includes(ticker)) return {};
+        if (this.bannedTickers.includes(ticker)) return;
 
         if (this.tickerCache[ticker] && this.tickerRateLimitMap.get(ticker)! > Date.now()) return this.tickerCache[ticker];
 
@@ -45,7 +45,7 @@ export default class PolygonClient {
     }
 
     public async fetchDetails(ticker: string) {
-        if (this.bannedTickers.includes(ticker)) return {};
+        if (this.bannedTickers.includes(ticker)) return;
 
         if (this.detailsCache[ticker] && this.tickerRateLimitMap.get(ticker)! > Date.now()) return this.detailsCache[ticker];
 
@@ -65,7 +65,7 @@ export default class PolygonClient {
     public async fetchDaily(date: Date) {
         const d = date.toISOString().slice(0, 10);
 
-        if (this.bannedDates.includes(d)) return {};
+        if (this.bannedDates.includes(d)) return;
 
         if (this.dailyCache[d]) return this.dailyCache[d];
 

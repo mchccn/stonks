@@ -6,7 +6,7 @@ export interface IUser extends Document {
     portfolio: {
         [ticker: string]: {
             name: string;
-            count: string;
+            count: number;
         };
     };
 }

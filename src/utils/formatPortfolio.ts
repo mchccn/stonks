@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js";
+import { AeroEmbed } from "@aeroware/aeroclient";
 
 export default function formatPortfolio(portfolio: {
     [ticker: string]: {
@@ -19,11 +19,11 @@ export default function formatPortfolio(portfolio: {
         .filter(($) => $);
 
     const pages = fields.map((f) =>
-        new MessageEmbed().addFields(
+        new AeroEmbed().addFields(
             f.map((t) => ({
                 name: `${t.ticker} (${t.name}) – ${t.count} share${t.count !== 1 ? "s" : ""}`,
                 value: "\u200b",
-            }))
+            })) // ! pad the array
         )
     );
 

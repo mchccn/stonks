@@ -5,8 +5,8 @@ import ms from "ms";
 export default {
     name: "help",
     aliases: ["commands"],
-    description: "",
-    details: "",
+    description: "Help yourself.",
+    details: "Fucking read the description.",
     usage: "[command]",
     category: "utility",
     cooldown: 1,
@@ -53,23 +53,11 @@ export default {
                     .setDescription(`Use \`${prefix}help <command>\` for info on a specific command!`)
                     .setTimestamp(message.createdAt)
                     .addFields(
-                        fields
-                            .map(({ name, value, inline }) => ({
-                                name,
-                                value: `\`\`\`\n${value + "".padEnd((max - value.split("\n").length) * 2, "\n\u200b")}\n\`\`\``,
-                                inline,
-                            }))
-                            .flatMap((f, i) =>
-                                i % 2 === 0 && i
-                                    ? [
-                                          {
-                                              name: "\u200b",
-                                              value: "\u200b",
-                                          },
-                                          f,
-                                      ]
-                                    : f
-                            )
+                        fields.map(({ name, value, inline }) => ({
+                            name,
+                            value: `\`\`\`\n${value + "".padEnd((max - value.split("\n").length) * 2, "\n\u200b")}\n\`\`\``,
+                            inline,
+                        }))
                     )
             );
         }
