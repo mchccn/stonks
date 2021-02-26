@@ -11,6 +11,8 @@ const manager = new ClientManager(keys);
 
     setInterval(async () => {
         await manager.fetchDaily(new Date(new Date().setDate(new Date().getDate() - 1)));
+
+        manager.graphCache = {};
     }, 1000 * 60 * 60 * 24);
 })();
 

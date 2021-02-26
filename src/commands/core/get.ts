@@ -14,7 +14,10 @@ export default {
     async callback({ message, args }) {
         const json = await manager.fetchStocks(args[0].toUpperCase());
 
-        if (!json || !json.results) return message.channel.send(`There isn't a company with that ticker.`);
+        if (!json || !json.results) {
+            message.channel.send(`There isn't a company with that ticker bruh.`);
+            return "invalid";
+        }
 
         const { o, h, l, c, v, vw, t, n } = json.results[0];
 

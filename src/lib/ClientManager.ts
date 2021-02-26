@@ -5,6 +5,7 @@ export default class ClientManager {
 
     public index!: number;
     public clients!: PolygonClient[];
+    public graphCache!: { [ticker: string]: any };
     public tickerCache!: { [ticker: string]: any };
     public dailyCache!: { [day: string]: any };
     public detailsCache!: { [ticker: string]: any };
@@ -20,6 +21,7 @@ export default class ClientManager {
         this.tickerCache = {};
         this.dailyCache = {};
         this.detailsCache = {};
+        this.graphCache = {};
 
         this.bannedTickers = [];
         this.bannedDates = [];
@@ -73,7 +75,7 @@ export default class ClientManager {
 
         const json = await client.fetchDaily(date);
 
-        if (json.results) {
+        if (json && json.results) {
             this.dailyCache[d] = json;
 
             json.results.forEach((res: any) => {

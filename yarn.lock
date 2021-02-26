@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@aeroware/aeroclient@^2.6.1":
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/@aeroware/aeroclient/-/aeroclient-2.6.1.tgz#b7505611581358f275306e115b07412d10c427bf"
-  integrity sha512-eXB2CCqNW6KU9Cu0gcW4P9W28TFIth8zvSe/J1O+18lmrpASiwHsgIY5Csrvx7JkG26ZXBtq5vlFjWaONK4/2Q==
+"@aeroware/aeroclient@^2.8.0":
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/@aeroware/aeroclient/-/aeroclient-2.8.0.tgz#bf55d122e95918fa1b588bfa55de0a8831365b81"
+  integrity sha512-CzVSvbIKNC8ZmyI3Mmvv0fBW9E3S8TT91p8H62Z4ro/HPDkcEDw6NE0FQaEUU9Sp6RQ5ol7qjFB9k5XyCkTlNQ==
   dependencies:
     "@aeroware/discord-utils" "^1.0.1"
     "@aeroware/logger" "^2.6.0"
@@ -23,6 +23,7 @@
     date-fns "^2.16.1"
     discord-parse-utils "^1.0.3"
     discord.js "^12.5.1"
+    dotenv "^8.2.0"
     keyv "^4.0.3"
     ms "^2.1.3"
     node-fetch "^2.6.1"
@@ -135,11 +136,6 @@
   integrity sha512-XIB2XbzHTN6ieIjfIMV9hlVcfPU26s2vafYWQcZHWXHOxiaRZYEDKEwdl129Zyg50+foYV2jCgtrqSA6qNuNSA==
   dependencies:
     defer-to-connect "^1.0.1"
-
-"@types/asciichart@^1.5.4":
-  version "1.5.4"
-  resolved "https://registry.yarnpkg.com/@types/asciichart/-/asciichart-1.5.4.tgz#f45cc1615cb8f2689ce68869a87edf1fd3e59b9f"
-  integrity sha512-rUKnjq2MPGwGy4LLw2q2LLcGQloAKBwBN0wBRVvaiZjv/dJoeZYrnLkglqfuqkWwvws0xTS8m8+L6ExqaqqaEA==
 
 "@types/axios@^0.14.0":
   version "0.14.0"
@@ -274,11 +270,6 @@ are-we-there-yet@~1.1.2:
   dependencies:
     delegates "^1.0.0"
     readable-stream "^2.0.6"
-
-asciichart@^1.5.25:
-  version "1.5.25"
-  resolved "https://registry.yarnpkg.com/asciichart/-/asciichart-1.5.25.tgz#f5aca189801b4e58019139bbb5922ab3cae3ca90"
-  integrity sha512-PNxzXIPPOtWq8T7bgzBtk9cI2lgS4SJZthUHEiQ1aoIc3lNzGfUvIvo9LiAnq26TACo9t1/4qP6KTGAUbzX9Xg==
 
 asynckit@^0.4.0:
   version "0.4.0"

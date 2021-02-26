@@ -3,31 +3,30 @@ import manager from "./manager";
 
 const pad = <T>(l: number, a: T[], v: T) => [...a, ...new Array(l).fill(v).slice(0, a.length)];
 
-export default async function formatPortfolio(portfolio: {
-    [ticker: string]: {
+export default async function formatPortfolio(
+    portfolio: {
+        ticker: string;
         name: string;
         count: number;
-    };
-}) {
-    const tickers = Object.keys(portfolio);
-
+    }[]
+) {
     const amount = 5;
 
-    const fields = await Promise.all(
-        tickers
-            .map(async (_, i) =>
+    const fields = (
+        await Promise.all(
+            portfolio.map((_, i) =>
                 i % amount
                     ? undefined!
                     : Promise.all(
-                          tickers.slice(i, Math.floor(i / amount) * amount + amount).map(async (ticker) => ({
-                              ticker,
-                              ...portfolio[ticker],
-                              price: (await manager.fetchStocks(ticker)).results[0].c,
+                          //@ts-ignore
+                          portfolio.slice(i, Math.floor(i / amount) * amount + amount).map(async ({ _doc: stock }) => ({
+                              ...stock,
+                              price: (await manager.fetchStocks(stock.ticker)).results[0].c,
                           }))
                       )
             )
-            .filter(($) => $)
-    );
+        )
+    ).filter(($) => $);
 
     const pages = fields.map((f) =>
         new AeroEmbed().addFields(

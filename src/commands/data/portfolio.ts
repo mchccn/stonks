@@ -14,12 +14,12 @@ export default {
     description: "Look at your shit portfolio.",
     details: "View your portfolio full of fucking crap.",
     category: "the fucking exit",
-    cooldown: 3600,
+    cooldown: 10,
     async callback({ message, parsed, client }) {
         let user = (await users.findById(message.author.id))!;
 
-        if (parsed![0]) {
-            const otherUser = await users.findById((parsed![0] as User).id);
+        if (parsed[0]) {
+            const otherUser = await users.findById((parsed[0] as User).id);
 
             if (!otherUser) {
                 message.channel.send(`They're not even investing you fucking idiot.`);
@@ -38,22 +38,19 @@ export default {
                 new AeroEmbed()
                     .setTitle(`${apiUser.username}'s portfolio`)
                     .addField(
-                        `Your balance is $${user.balance.toLocaleString()}`,
-                        `Your portfolio's net worth is ${(
-                            await Promise.all(Object.keys(user.portfolio).map((ticker) => manager.fetchStocks(ticker)))
+                        `${
+                            user._id === message.author.id ? "Your" : `${apiUser.username}'s`
+                        } balance is $${user.balance.toLocaleString()}`,
+                        `${user._id === message.author.id ? "Your" : `${apiUser.username}'s`} portfolio's net worth is ${(
+                            await Promise.all(user.portfolio.map((stock) => manager.fetchStocks(stock.ticker)))
                         )
-                            .map(({ ticker, results }) => user.portfolio[ticker].count * results[0].c)
+                            .map(({ results }, i) => user.portfolio[i].count * results[0].c)
                             .reduce((a, b) => a + b, 0)}`
                     ),
                 ...(await formatPortfolio(user.portfolio)),
             ],
             {
                 time: 120000,
-                fastForwardAndRewind: {
-                    fastForwardPrompt: "How many pages do you want to skip bitch?",
-                    rewindPrompt: "How many pages do you want to skip bitch?",
-                    time: 10000,
-                },
                 goTo: {
                     prompt: "Where do you want to hop to bitch?",
                     time: 10000,

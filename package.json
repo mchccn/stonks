@@ -11,11 +11,9 @@
     "author": "im-lonely <cursors.dev@gmail.com>",
     "license": "MIT",
     "dependencies": {
-        "@aeroware/aeroclient": "^2.6.1",
+        "@aeroware/aeroclient": "^2.8.0",
         "@aeroware/discord-utils": "^1.4.0",
         "@aeroware/logger": "^2.7.0",
-        "@types/asciichart": "^1.5.4",
-        "asciichart": "^1.5.25",
         "canvas": "^2.6.1",
         "discord.js": "^12.5.1",
         "dotenv": "^8.2.0",

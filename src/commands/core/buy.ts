@@ -7,7 +7,7 @@ import manager from "../../utils/manager";
 export default {
     name: "buy",
     aliases: ["purchase", "invest"],
-    args: false,
+    args: true,
     usage: "<ticker> [amount]",
     metasyntax: Arguments.compile(`<ticker> [amount]`, {
         ticker: "string",
@@ -20,13 +20,16 @@ export default {
     async callback({ message, parsed, client }) {
         const user = (await users.findById(message.author.id))!;
 
-        const ticker = (parsed![0] as string).toUpperCase();
+        const ticker = (parsed[0] as string).toUpperCase();
 
-        const amount = (parsed![1] as number) || 1;
+        const amount = (parsed[1] as number) || 1;
 
         const json = await manager.fetchStocks(ticker);
 
-        if (!json || !json.results) return message.channel.send(`There isn't a company with that ticker bruh.`);
+        if (!json || !json.results) {
+            message.channel.send(`There isn't a company with that ticker bruh.`);
+            return "invalid";
+        }
 
         const cost = json.results[0].c * amount;
 
@@ -66,12 +69,15 @@ export default {
 
         user.balance -= cost;
 
-        user.portfolio[ticker]
-            ? (user.portfolio[ticker].count += amount)
-            : (user.portfolio[ticker] = {
-                  count: amount,
-                  name: details.name,
-              });
+        const stock = user.portfolio.findIndex((s) => s.ticker === ticker);
+
+        if (stock >= 0) user.portfolio[stock].count += amount;
+        else
+            user.portfolio.push({
+                ticker,
+                count: amount,
+                name: details.name,
+            });
 
         await user.save();
 

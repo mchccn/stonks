@@ -4,11 +4,10 @@ export interface IUser extends Document {
     _id: string;
     balance: number;
     portfolio: {
-        [ticker: string]: {
-            name: string;
-            count: number;
-        };
-    };
+        ticker: string;
+        name: string;
+        count: number;
+    }[];
 }
 
 export const userSchema = new mongoose.Schema({
@@ -21,8 +20,23 @@ export const userSchema = new mongoose.Schema({
         default: 100000,
     },
     portfolio: {
-        type: Object,
-        default: {},
+        type: [
+            {
+                ticker: {
+                    type: String,
+                    required: true,
+                },
+                name: {
+                    type: String,
+                    required: true,
+                },
+                count: {
+                    type: Number,
+                    required: true,
+                },
+            },
+        ],
+        default: [],
     },
 });
 
