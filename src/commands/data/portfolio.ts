@@ -13,7 +13,7 @@ export default {
     metasyntax: Arguments.compile(`[user]`),
     description: "Look at your shit portfolio.",
     details: "View your portfolio full of fucking crap.",
-    category: "the fucking exit",
+    category: "utility",
     cooldown: 10,
     async callback({ message, parsed, client }) {
         let user = (await users.findById(message.author.id))!;

@@ -137,6 +137,11 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
+"@types/asciichart@^1.5.4":
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/@types/asciichart/-/asciichart-1.5.4.tgz#f45cc1615cb8f2689ce68869a87edf1fd3e59b9f"
+  integrity sha512-rUKnjq2MPGwGy4LLw2q2LLcGQloAKBwBN0wBRVvaiZjv/dJoeZYrnLkglqfuqkWwvws0xTS8m8+L6ExqaqqaEA==
+
 "@types/axios@^0.14.0":
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@types/axios/-/axios-0.14.0.tgz#ec2300fbe7d7dddd7eb9d3abf87999964cafce46"
@@ -270,6 +275,11 @@ are-we-there-yet@~1.1.2:
   dependencies:
     delegates "^1.0.0"
     readable-stream "^2.0.6"
+
+asciichart@^1.5.25:
+  version "1.5.25"
+  resolved "https://registry.yarnpkg.com/asciichart/-/asciichart-1.5.25.tgz#f5aca189801b4e58019139bbb5922ab3cae3ca90"
+  integrity sha512-PNxzXIPPOtWq8T7bgzBtk9cI2lgS4SJZthUHEiQ1aoIc3lNzGfUvIvo9LiAnq26TACo9t1/4qP6KTGAUbzX9Xg==
 
 asynckit@^0.4.0:
   version "0.4.0"
